@@ -1,4 +1,5 @@
 import json
+import re
 
 import requests
 from bs4 import BeautifulSoup
@@ -14,6 +15,7 @@ file = 'boardnamedevices.json'
 model = 'Model'
 bname = 'Board name(s)'
 
+to_remove = re.compile('^(x86|_he)')
 
 def sanitize(word):
     """Sanitizes a `word` to remove spaces including `\xa0`.
@@ -26,6 +28,28 @@ def sanitize(word):
 
     """
     return word.get_text(strip=True).replace('\xa0', ' ')
+
+
+def simplify_board_name(board_name):
+    """Removes the following from board names:
+    - `x86-`, e.g. `x86-mario`
+    - `_he`, e.g. `x86-alex_he`
+    - `&` - e.g. `falco & falco_II`
+
+    Args:
+        board_name: the board name to simplify
+
+    Returns:
+        str: a simplified board name
+
+    """
+    if '&' in board_name:
+        try:
+            # always try to extract the first of two
+            board_name = board_name.split('&')[0].strip()
+        except:
+            pass
+    return to_remove.sub('', board_name.lower())
 
 
 def parse_header(header):
@@ -46,27 +70,30 @@ def parse_header(header):
     return idx
 
 
-def iterate_table(table):
+def iterate_table(table, header = None):
     """Iterates through a `table` to retrieve `Model` and `Board name(s)`.
 
     Args:
         table: the table to parse
+        header (optional): the bs4 header to use; defaults to None
 
     Returns:
         dict: with key as `Board name(s)` and value as `Model`
 
     """
     _json = {}
-    head = parse_header(table.tr.find_all('td'))
+    if not header:
+        header = table.tr.find_all('td')
+    head = parse_header(header)
     for row in table.find_all('tr')[1:]:
         tds = row.find_all('td')
         _model = sanitize(tds[head[model]])
-        _bname = sanitize(tds[head[bname]])
+        _bname = simplify_board_name(sanitize(tds[head[bname]]))
 
         if _bname in _json:
             _json[_bname] = '{}/{}'.format(
                 _json[_bname],
-                _bname
+                _model
                 )
         else:
             _json[_bname] = _model
@@ -90,16 +117,22 @@ def get_as_json():
     except:
         return False
 
-    all_tables = [routers, usb_typec]
+    main_header = (
+        soup.find('table', 'goog-ws-list-header')
+        .find('tr').find_all('th')
+        )
+    main_table = soup.find('table', 'sites-table').tbody
 
-    for table in all_tables:
-        _json.update(iterate_table(table))
+    for table in [routers, usb_typec]:
+       _json.update(iterate_table(table))
+
+    _json.update(iterate_table(main_table, main_header))
 
     print(_json)
 
     #with open(file, 'w') as f:
         #pass
-        #json.dump(tickets, f)
+        #json.dump(_json, f)
         #return True
 
 if __name__ == '__main__':
