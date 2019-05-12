@@ -27,6 +27,7 @@ def sanitize(word):
     """
     return word.get_text(strip=True).replace('\xa0', ' ')
 
+
 def parse_header(header):
     """Parses header to extract `Model` and `Board name(s)` positions.
 
@@ -45,6 +46,34 @@ def parse_header(header):
     return idx
 
 
+def iterate_table(table):
+    """Iterates through a `table` to retrieve `Model` and `Board name(s)`.
+
+    Args:
+        table: the table to parse
+
+    Returns:
+        dict: with key as `Board name(s)` and value as `Model`
+
+    """
+    _json = {}
+    head = parse_header(table.tr.find_all('td'))
+    for row in table.find_all('tr')[1:]:
+        tds = row.find_all('td')
+        _model = sanitize(tds[head[model]])
+        _bname = sanitize(tds[head[bname]])
+
+        if _bname in _json:
+            _json[_bname] = '{}/{}'.format(
+                _json[_bname],
+                _bname
+                )
+        else:
+            _json[_bname] = _model
+
+    return _json
+
+
 def get_as_json():
     """Gets info as json."""
     _json = {}
@@ -61,19 +90,10 @@ def get_as_json():
     except:
         return False
 
-    routers_head = parse_header(routers.tr.find_all('td'))
-    for router in routers.find_all('tr')[1:]:
-        tds = router.find_all('td')
-        _model = sanitize(tds[routers_head[model]])
-        _bname = sanitize(tds[routers_head[bname]])
+    all_tables = [routers, usb_typec]
 
-        if _bname in _json:
-            _json[_bname] = '{}/{}'.format(
-                _json[_bname],
-                _bname
-                )
-        else:
-            _json[_bname] = _model
+    for table in all_tables:
+        _json.update(iterate_table(table))
 
     print(_json)
 
