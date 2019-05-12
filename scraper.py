@@ -15,7 +15,7 @@ file = 'boardnamedevices.json'
 model = 'Model'
 bname = 'Board name(s)'
 
-to_remove = re.compile('^(x86|_he)')
+to_remove = re.compile('^(x86-|_he)')
 
 def sanitize(word):
     """Sanitizes a `word` to remove spaces including `\xa0`.
