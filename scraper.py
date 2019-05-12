@@ -88,6 +88,9 @@ def iterate_table(table, header = None):
     for row in table.find_all('tr')[1:]:
         tds = row.find_all('td')
         _model = sanitize(tds[head[model]])
+        if not _model:
+            continue
+
         _bname = simplify_board_name(sanitize(tds[head[bname]]))
 
         if _bname in _json:
