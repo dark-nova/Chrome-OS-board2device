@@ -12,7 +12,20 @@ url = (
 file = 'boardnamedevices.json'
 
 model = 'Model'
-bnames = 'Board name(s)'
+bname = 'Board name(s)'
+
+
+def sanitize(word):
+    """Sanitizes a `word` to remove spaces including `\xa0`.
+
+    Args:
+        word: the word to sanitize
+
+    Returns:
+        str: the word, without the unnecessary stuff
+
+    """
+    return word.get_text(strip=True).replace('\xa0', ' ')
 
 def parse_header(header):
     """Parses header to extract `Model` and `Board name(s)` positions.
@@ -28,8 +41,8 @@ def parse_header(header):
     idx = {}
     in_text = [td.get_text(strip=True) for td in header]
     idx[model] = in_text.index(model)
-    idx[bnames] = in_text.index(bnames)
-    return (idx_model, idx_bnames)
+    idx[bname] = in_text.index(bname)
+    return idx
 
 
 def get_as_json():
@@ -51,7 +64,16 @@ def get_as_json():
     routers_head = parse_header(routers.tr.find_all('td'))
     for router in routers.find_all('tr')[1:]:
         for _r in router:
-            pass
+            _model = sanitize(_r[routers_head[model]])
+            _bname = sanitize(_r[routers_head[bname]])
+
+            if _bname in _json:
+                _json[_bname] = '{}/{}'.format(
+                    _json[_bname],
+                    _bname
+                    )
+
+    print(_json)
 
     #with open(file, 'w') as f:
         #pass
@@ -59,4 +81,4 @@ def get_as_json():
         #return True
 
 if __name__ == '__main__':
-    pass
+    get_as_json()
