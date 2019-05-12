@@ -108,11 +108,11 @@ def get_as_json():
     """Gets info as json."""
     _json = {}
 
-    with open('example.html', 'r') as example:
-        soup = BeautifulSoup(example, 'html.parser')
+    # with open('example.html', 'r') as example:
+    #     soup = BeautifulSoup(example, 'html.parser')
     
-    #page = requests.get(url)
-    #soup = BeautifulSoup(page.text, 'html.parser')
+    page = requests.get(url)
+    soup = BeautifulSoup(page.text, 'html.parser')
 
     two_tables = soup.find('td', 'sites-layout-tile')
     try:
@@ -131,12 +131,10 @@ def get_as_json():
 
     _json.update(iterate_table(main_table, main_header))
 
-    print(_json)
-
-    #with open(file, 'w') as f:
-        #pass
-        #json.dump(_json, f)
-        #return True
+    with open(file, 'w') as f:
+        pass
+        json.dump(_json, f)
+        return True
 
 if __name__ == '__main__':
     get_as_json()
