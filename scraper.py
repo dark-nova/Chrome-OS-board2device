@@ -63,15 +63,17 @@ def get_as_json():
 
     routers_head = parse_header(routers.tr.find_all('td'))
     for router in routers.find_all('tr')[1:]:
-        for _r in router:
-            _model = sanitize(_r[routers_head[model]])
-            _bname = sanitize(_r[routers_head[bname]])
+        tds = router.find_all('td')
+        _model = sanitize(tds[routers_head[model]])
+        _bname = sanitize(tds[routers_head[bname]])
 
-            if _bname in _json:
-                _json[_bname] = '{}/{}'.format(
-                    _json[_bname],
-                    _bname
-                    )
+        if _bname in _json:
+            _json[_bname] = '{}/{}'.format(
+                _json[_bname],
+                _bname
+                )
+        else:
+            _json[_bname] = _model
 
     print(_json)
 
