@@ -11,10 +11,12 @@ The keys are the board names; the values are all devices that fit under that umb
 - Any model that shares a common board will be as one string, delimited by a slash `/`.
 
 ## Files
-- [`boardnamedevices.json`](boardnamedevices.json) - the current JSON
+- [`boardnamedevices.json`](boardnamedevices.json) - the base JSON
+- [`boardnamedevices-1.json`](boardnamedevices-1.json) - the same with empty model names replaced with "White Label"
+- [`boardnamedevices-2.json`](boardnamedevices-2.json) - the same with also board names with underscores replaced with the "common" name
 - [`example.html`](example.html) - the example from which I tested against
 - [`jsonlines.sh`](jsonlines.sh) - a very barbaric way of pretty-printing (permanently) the JSON
 - [`requirements.txt`](requirements.txt) - the dependencies used for this project
-- [`scraper.py`] - the scraper itself
+- [`scraper.py`](scraper.py) - the scraper itself
 
 #### For the [r/ChromeOS](https://www.reddit.com/r/chromeos) Discord.

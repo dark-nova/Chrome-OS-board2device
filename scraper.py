@@ -47,7 +47,16 @@ def simplify_board_name(board_name):
         try:
             # always try to extract the first of two
             board_name = board_name.split('&')[0].strip()
-        except:
+        except Exception as e:
+            print(e)
+            pass
+    # comment below for `boardnamedevices.json`
+    if '_' in board_name:
+        try:
+            # always try to extract the first of two
+            board_name = board_name.split('_')[0].strip()
+        except Exception as e:
+            print(e)
             pass
     return to_remove.sub('', board_name.lower())
 
@@ -89,7 +98,10 @@ def iterate_table(table, header = None):
         tds = row.find_all('td')
         _model = sanitize(tds[head[model]])
         if not _model:
-            continue
+            # uncomment continue for `boardnamedevices.json`
+            # continue
+            # comment below for `boardnamedevices.json`
+            _model = "White Label"
 
         _bname = simplify_board_name(sanitize(tds[head[bname]]))
 
