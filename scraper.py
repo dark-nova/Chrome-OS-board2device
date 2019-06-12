@@ -10,7 +10,11 @@ url = (
     '/chromium-os/developer-information-for-chrome-os-devices'
     )
 
-file = 'boardnamedevices.json'
+files = [
+    'boardnamedevices.json',
+    'boardnamedevices-1.json',
+    'boardnamedevices-2.json'
+    ]
 
 model = 'Model'
 bname = 'Board name(s)'
@@ -50,7 +54,23 @@ def simplify_board_name(board_name):
         except Exception as e:
             print(e)
             pass
-    # comment below for `boardnamedevices.json`
+    return to_remove.sub('', board_name.lower())
+
+
+def simplify_underscores(board_name):
+    """Simplifies to use a common name `x` given a name in format `x_y`,
+    discarding `_y`.
+
+    Used for `boardnamedevices-2.json`.
+
+    Args:
+        board_name: the board name to simplify again
+
+    Returns:
+        str: a simplified board name
+
+    """
+    board_name = simplify_board_name(board_name)
     if '_' in board_name:
         try:
             # always try to extract the first of two
@@ -87,38 +107,59 @@ def iterate_table(table, header = None):
         header (optional): the bs4 header to use; defaults to None
 
     Returns:
-        dict: with key as `Board name(s)` and value as `Model`
+        dict: of dicts with keys as `Board name(s)` and values as `Model`
 
     """
-    _json = {}
+    jsons = {file: {} for file in files}
     if not header:
         header = table.tr.find_all('td')
     head = parse_header(header)
     for row in table.find_all('tr')[1:]:
         tds = row.find_all('td')
         _model = sanitize(tds[head[model]])
-        if not _model:
-            # uncomment continue for `boardnamedevices.json`
-            # continue
-            # comment below for `boardnamedevices.json`
-            _model = "White Label"
 
         _bname = simplify_board_name(sanitize(tds[head[bname]]))
 
-        if _bname in _json:
-            _json[_bname] = '{}/{}'.format(
-                _json[_bname],
-                _model
-                )
-        else:
-            _json[_bname] = _model
+        for _json in jsons:
+            current = jsons[_json]
+            if not _model and _json == files[0]:
+                # for `boardnamedevices.json`, do not record blank names
+                continue
+            elif not _model:
+                _model = "White Label"
 
-    return _json
+            if _json == files[2]:
+                _bname = simplify_underscores(_bname)
+
+            if _bname in current:
+                current[_bname] = '{}/{}'.format(
+                    current[_bname],
+                    _model
+                    )
+            else:
+                current[_bname] = _model
+
+    return jsons
+
+
+def combine_dicts(dict_a, dict_b):
+    """Combines two dicts of dicts into one. Specifically,
+    combines two dicts with the keys = `files`.
+
+    Args:
+        dict_a (dict): dictionary a
+        dict_b (dict): dictionary b
+
+    Returns:
+        dict[dict]: a combined dict
+
+    """
+    return {key: {**dict_a[key], **dict_b[key]} for key in dict_a}
 
 
 def get_as_json():
     """Gets info as json."""
-    _json = {}
+    jsons = {file: {} for file in files}
 
     # with open('example.html', 'r') as example:
     #     soup = BeautifulSoup(example, 'html.parser')
@@ -139,14 +180,15 @@ def get_as_json():
     main_table = soup.find('table', 'sites-table').tbody
 
     for table in [routers, usb_typec]:
-       _json.update(iterate_table(table))
+        jsons = combine_dicts(jsons, iterate_table(table))
 
-    _json.update(iterate_table(main_table, main_header))
+    jsons = combine_dicts(jsons, iterate_table(main_table, main_header))
 
-    with open(file, 'w') as f:
-        pass
-        json.dump(_json, f)
-        return True
+    for _json in jsons:
+        with open(_json, 'w') as f:
+            pass
+            json.dump(jsons[_json], f)
+    return True
 
 if __name__ == '__main__':
     get_as_json()
