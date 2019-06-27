@@ -186,8 +186,7 @@ def get_as_json():
 
     for _json in jsons:
         with open(_json, 'w') as f:
-            pass
-            json.dump(jsons[_json], f)
+            json.dump(jsons[_json], f, indent=4)
     return True
 
 if __name__ == '__main__':
