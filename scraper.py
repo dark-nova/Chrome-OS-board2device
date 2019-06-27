@@ -1,6 +1,8 @@
+import difflib
 import json
 import re
 
+import pendulum
 import requests
 from bs4 import BeautifulSoup
 
@@ -11,9 +13,9 @@ url = (
     )
 
 files = [
-    'boardnamedevices.json',
-    'boardnamedevices-1.json',
-    'boardnamedevices-2.json'
+    'boardnamedevices',
+    'boardnamedevices-1',
+    'boardnamedevices-2'
     ]
 
 model = 'Model'
@@ -185,8 +187,35 @@ def get_as_json():
     jsons = combine_dicts(jsons, iterate_table(main_table, main_header))
 
     for _json in jsons:
-        with open(_json, 'w') as f:
-            json.dump(jsons[_json], f, indent=4)
+        file = f'{_json}.json'
+        with open(file, 'r') as f:
+            old = json.load(f)
+            if jsons[_json] == old:
+                continue
+
+        with open(file, 'w') as f:
+            diff_file = f'{_json}.diff'
+            dump = json.dumps(jsons[_json], indent=4)
+            diff = [pendulum.today().strftime('%Y-%m-%d')]
+            diff.append('\n===\n')
+            diff.extend(
+                [
+                    d for d in
+                    difflib.ndiff(
+                        json.dumps(old, indent=4).splitlines(),
+                        dump.splitlines()
+                        )
+                    if d.startswith('+') or d.startswith('-')
+                    ]
+                )
+            with open(diff_file, 'r') as g:
+                old_diff = '\n\n' + g.read()
+            with open(diff_file, 'w') as g:
+                g.write('\n'.join(diff))
+            with open(diff_file, 'a') as g:
+                g.write(old_diff)
+            f.write(dump)
+  
     return True
 
 if __name__ == '__main__':
