@@ -21,6 +21,6 @@ The keys are the board names; the values are all devices that fit under that umb
 - [`requirements.txt`](requirements.txt) - the dependencies used for this project
 - [`scraper.py`](scraper.py) - the scraper itself
 - [`LICENSE`](LICENSE) - MIT License
-- [`CHANGELOG`](CHANGELOG)
+- [`CHANGELOG`](CHANGELOG.md)
 
 #### For the [r/ChromeOS](https://www.reddit.com/r/chromeos) Discord.
