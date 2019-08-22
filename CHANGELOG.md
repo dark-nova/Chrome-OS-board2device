@@ -10,9 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - [`boardnamedevices-1.diff`](boardnamedevices-1.diff)
     - [`boardnamedevices-2.diff`](boardnamedevices-2.diff)
 - Retroactively add changelog
+- Some examples given for [`README.md`](README.md) ([section](README.md#for-the-sake-of-simplicity))
 
 ### Changed
 - Updated [`requirements.txt`](requirements.txt)
+
+### Removed
+- `jsonlines.sh` is no longer necessary; instead, `json.dumps` uses `indent=4` for the equivalent pretty-printing.
 
 ## [1.2] - 2019-06-11
 ### Changed
