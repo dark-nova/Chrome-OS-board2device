@@ -12,22 +12,53 @@ Some board names share some names in common, so the script makes an attempt to g
 
 Examples:
 - Any model listed with two boards will only use the first board listed.
-    - `alex`: `x86-alex`, `x86-alex_he`
-    - `falco`: `falco`, `falco_li`
-    - `zgb`: `x86-zgb`, `x86-zgb_he`
+    - `alex`
+        - `x86-alex`
+        - `x86-alex_he`
+    - `falco`
+        - `falco`
+        - `falco_li`
+    - `zgb`
+        - `x86-zgb`
+        - `x86-zgb_he`
 - `x86-` and `_he` on applicable boards are stripped.
-    - `alex`: `x86-alex`, `x86-alex_he`
-    - `mario`: `x86-mario`
-    - `zgb`: `x86-zgb`, `x86-zgb_he`
-- Any and all models that share a common board will be as one string, delimited by a slash `/`.
-    - `hana`: `Lenovo N23 Yoga Chromebook/Poin2 Chromebook 14/Poin2 Chromebook 11C/Lenovo 300e Chromebook/Lenovo Chromebook C330/Lenovo Chromebook S330`
+    - `alex`
+        - `x86-alex`
+        - `x86-alex_he`
+    - `mario`
+        - `x86-mario`
+    - `zgb`
+        - `x86-zgb`
+        - `x86-zgb_he`
+- Any and all models that share a common board will be as one string, delimited by a slash `/`. (i.e. board name: device 1/device 2, etc.)
+    - `hana: Lenovo N23 Yoga Chromebook/Poin2 Chromebook 14/Poin2 Chromebook 11C/Lenovo 300e Chromebook/Lenovo Chromebook C330/Lenovo Chromebook S330`
 - ([`boardnamedevices-2.json`](boardnamedevices-2.json) only) Board names with a sub-board name are ignored.
-    - `auron`: `auron_paine`, `auron_yuna`
-    - `daisy`: `daisy`, `daisy_skate`, `daisy_spring`
-    - `nyan`: `nyan_big`, `nyan_blaze`, `nyan_kitty`
-    - `parrot`: `parrot`, `parrot_ivb`
-    - `peach`: `peach_pi`, `peach_pit`
-    - `veyron`: `veyron_fievel`, `veyron_jaq`, `veyron_jerry`, `veyron_mickey`, `veyron_mighty`, `veyron_minnie`, `veyron_speedy`, `veyron_tiger`
+    - `auron`
+        - `auron_paine`
+        - `auron_yuna`
+    - `daisy`
+        - `daisy`
+        - `daisy_skate`
+        - `daisy_spring`
+    - `nyan`
+        - `nyan_big`
+        - `nyan_blaze`
+        - `nyan_kitty`
+    - `parrot`
+        - `parrot`
+        - `parrot_ivb`
+    - `peach`
+        - `peach_pi`
+        - `peach_pit`
+    - `veyron`
+        - `veyron_fievel`
+        - `veyron_jaq`
+        - `veyron_jerry`
+        - `veyron_mickey`
+        - `veyron_mighty`
+        - `veyron_minnie`
+        - `veyron_speedy`
+        - `veyron_tiger`
 
 ## Usage
 
