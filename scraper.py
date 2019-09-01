@@ -197,7 +197,7 @@ def get_as_json():
             diff_file = f'{_json}.diff'
             dump = json.dumps(jsons[_json], indent=4)
             diff = [pendulum.today().strftime('%Y-%m-%d')]
-            diff.append('\n===\n')
+            diff.append('===')
             diff.extend(
                 [
                     d for d in
