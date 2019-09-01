@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.3.1] - 2019-09-01
+### Changed
+- Improved (readme)[README.md]
+- Line spacing on diffs
+
 ## [1.3] - 2019-06-26
 ### Added
 - Diff files added to show changes between versions, timestamped
@@ -10,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - [`boardnamedevices-1.diff`](boardnamedevices-1.diff)
     - [`boardnamedevices-2.diff`](boardnamedevices-2.diff)
 - Retroactively add changelog
-- Some examples given for [`README.md`](README.md) ([section](README.md#for-the-sake-of-simplicity))
+- Some examples given for [`README.md`](README.md) ([section](README.md#simplification-of-board-names))
 
 ### Changed
 - Updated [`requirements.txt`](requirements.txt)
