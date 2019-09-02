@@ -1,6 +1,7 @@
 import difflib
 import json
 import re
+from collections import defaultdict
 
 import pendulum
 import requests
@@ -112,7 +113,7 @@ def iterate_table(table, header = None):
         dict: of dicts with keys as `Board name(s)` and values as `Model`
 
     """
-    jsons = {file: {} for file in files}
+    jsons = {file: defaultdict(list) for file in files}
     if not header:
         header = table.tr.find_all('td')
     head = parse_header(header)
@@ -133,18 +134,12 @@ def iterate_table(table, header = None):
             if _json == files[2]:
                 _bname = simplify_underscores(_bname)
 
-            if _bname in current:
-                current[_bname] = '{}/{}'.format(
-                    current[_bname],
-                    _model
-                    )
-            else:
-                current[_bname] = _model
+            current[_bname].append(_model)
 
     return jsons
 
 
-def combine_dicts(dict_a, dict_b):
+def combine_dicts(dict_a: dict, dict_b: dict):
     """Combines two dicts of dicts into one. Specifically,
     combines two dicts with the keys = `files`.
 
@@ -157,6 +152,31 @@ def combine_dicts(dict_a, dict_b):
 
     """
     return {key: {**dict_a[key], **dict_b[key]} for key in dict_a}
+
+
+def flatten_models(dicts: dict):
+    """Flattens models from `list` to `str`.
+
+    If multiple models are found on a given board, delimit
+    the results with '/', slash.
+
+    Args:
+        dicts (dict): a dictionary of 3 defaultdicts, with
+            the 'default' being `list`
+
+    Returns:
+        dict: flattened
+
+    """
+    return {
+        file: {
+            board_name: '/'.join(models)
+            for board_name, models
+            in contents.items()
+            }
+        for file, contents
+        in dicts.items()
+        }
 
 
 def get_as_json():
@@ -185,6 +205,8 @@ def get_as_json():
         jsons = combine_dicts(jsons, iterate_table(table))
 
     jsons = combine_dicts(jsons, iterate_table(main_table, main_header))
+
+    jsons = flatten_models(jsons)
 
     for _json in jsons:
         file = f'{_json}.json'

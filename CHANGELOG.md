@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.3.2] - 2019-09-01
+### Added
+- Now using `collections.defaultdict` to handle boardname:model concatenation better
+- Consequently, added a new function `flatten_models` that changes `list` to `str` for each board name entry
+
 ## [1.3.1] - 2019-09-01
 ### Changed
 - Improved (readme)[README.md]
