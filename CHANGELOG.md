@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [1.3.1] - 2019-09-01
 ### Changed
-- Improved (readme)[README.md]
+- Improved [readme](README.md)
 - Line spacing on diffs
 
 ## [1.3] - 2019-06-26
