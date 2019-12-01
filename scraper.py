@@ -1,30 +1,64 @@
 import difflib
 import json
+import logging
 import re
 from collections import defaultdict
+from typing import Dict, List
 
 import pendulum
 import requests
 from bs4 import BeautifulSoup
+from bs4.element import Tag, ResultSet
 
 
-url = (
+LOGGER = logging.getLogger('cros-b2d')
+LOGGER.setLevel(logging.DEBUG)
+
+FH = logging.handlers.RotatingFileHandler(
+    'cros-b2d.log',
+    maxBytes=4096,
+    backupCount=5,
+    )
+FH.setLevel(logging.DEBUG)
+
+CH = logging.StreamHandler()
+CH.setLevel(logging.INFO)
+
+FH.setFormatter(
+    logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+    )
+CH.setFormatter(
+    logging.Formatter(
+        '%(levelname)s - %(message)s'
+        )
+    )
+
+LOGGER.addHandler(FH)
+LOGGER.addHandler(CH)
+
+URL = (
     'https://www.chromium.org'
     '/chromium-os/developer-information-for-chrome-os-devices'
     )
 
-files = [
+FILES = [
     'boardnamedevices',
     'boardnamedevices-1',
     'boardnamedevices-2'
     ]
 
-model = 'Model'
-bname = 'Board name(s)'
+MODEL = 'Model'
+B_NAME = 'Board name(s)'
 
-to_remove = re.compile('^(x86-|_he)')
+TO_REMOVE = re.compile('^(x86-|_he)')
 
-def sanitize(word):
+JSON = Dict[str, List[str]] # {board name: [device 1, device 2]}
+JSONS = Dict[str, JSON] # {json file: {board name: [...]}}
+
+
+def sanitize(word: str) -> str:
     """Sanitizes a `word` to remove spaces including `\xa0`.
 
     Args:
@@ -37,7 +71,7 @@ def sanitize(word):
     return word.get_text(strip=True).replace('\xa0', ' ')
 
 
-def simplify_board_name(board_name):
+def simplify_board_name(board_name: str) ->  str:
     """Removes the following from board names:
     - `x86-`, e.g. `x86-mario`
     - `_he`, e.g. `x86-alex_he`
@@ -54,13 +88,12 @@ def simplify_board_name(board_name):
         try:
             # always try to extract the first of two
             board_name = board_name.split('&')[0].strip()
-        except Exception as e:
-            print(e)
-            pass
-    return to_remove.sub('', board_name.lower())
+        except AttributeError as e:
+            LOGGER.info(e)
+    return TO_REMOVE.sub('', board_name.lower())
 
 
-def simplify_underscores(board_name):
+def simplify_underscores(board_name: str) -> str:
     """Simplifies to use a common name `x` given a name in format `x_y`,
     discarding `_y`.
 
@@ -78,18 +111,17 @@ def simplify_underscores(board_name):
         try:
             # always try to extract the first of two
             board_name = board_name.split('_')[0].strip()
-        except Exception as e:
-            print(e)
-            pass
-    return to_remove.sub('', board_name.lower())
+        except AttributeError as e:
+            LOGGER.info(e)
+    return TO_REMOVE.sub('', board_name.lower())
 
 
-def parse_header(header):
+def parse_header(header: ResultSet) -> Dict[str, int]:
     """Parses header to extract `Model` and `Board name(s)` positions.
 
     Args:
-        header (bs4.element.ResultSet): the table header with at least
-            'Model' and 'Board name(s)' columns
+        header (ResultSet): the table header with at least 'Model' and
+            'Board name(s)' columns
 
     Returns:
         dict: 0-based indices of the columns we want
@@ -97,64 +129,67 @@ def parse_header(header):
     """
     idx = {}
     in_text = [td.get_text(strip=True) for td in header]
-    idx[model] = in_text.index(model)
-    idx[bname] = in_text.index(bname)
+    idx[MODEL] = in_text.index(MODEL)
+    idx[B_NAME] = in_text.index(B_NAME)
     return idx
 
 
-def iterate_table(table, header = None):
+def iterate_table(table: Tag, header: ResultSet = None) -> JSON:
     """Iterates through a `table` to retrieve `Model` and `Board name(s)`.
 
     Args:
-        table: the table to parse
-        header (optional): the bs4 header to use; defaults to None
+        table (Tag): the table to parse
+        header (ResultSet, optional): the bs4 header to use;
+            defaults to None
 
     Returns:
         dict: of dicts with keys as `Board name(s)` and values as `Model`
 
     """
-    jsons = {file: defaultdict(list) for file in files}
+    jsons = {file: defaultdict(list) for file in FILES}
     if not header:
         header = table.tr.find_all('td')
     head = parse_header(header)
     for row in table.find_all('tr')[1:]:
         tds = row.find_all('td')
-        _model = sanitize(tds[head[model]])
+        model = sanitize(tds[head[MODEL]])
 
-        _bname = simplify_board_name(sanitize(tds[head[bname]]))
+        board_name = simplify_board_name(sanitize(tds[head[B_NAME]]))
 
         for _json in jsons:
             current = jsons[_json]
-            if not _model and _json == files[0]:
+            if not model and _json == FILES[0]:
                 # for `boardnamedevices.json`, do not record blank names
                 continue
-            elif not _model:
-                _model = "White Label"
+            elif not model:
+                model = "White Label"
 
-            if _json == files[2]:
-                _bname = simplify_underscores(_bname)
+            if _json == FILES[2]:
+                board_name = simplify_underscores(board_name)
 
-            current[_bname].append(_model)
+            current[board_name].append(model)
 
     return jsons
 
 
-def combine_dicts(dict_a: dict, dict_b: dict):
+def combine_dicts(dict_a: JSONS, dict_b: JSONS) -> JSONS:
     """Combines two dicts of dicts into one. Specifically,
-    combines two dicts with the keys = `files`.
+    combines two dicts with the keys = `FILES`. This is preferred
+    over `dict.update`, because `dict.update` also overwrites
+    existing information if keys collide.
 
     Args:
         dict_a (dict): dictionary a
         dict_b (dict): dictionary b
 
     Returns:
-        dict[dict]: a combined dict
+        dict: a combined dict
 
     """
     return {key: {**dict_a[key], **dict_b[key]} for key in dict_a}
 
 
-def flatten_models(dicts: dict):
+def flatten_models(dicts: JSON) -> Dict[str, Dict[str, str]]:
     """Flattens models from `list` to `str`.
 
     If multiple models are found on a given board, delimit
@@ -170,7 +205,7 @@ def flatten_models(dicts: dict):
     """
     return {
         file: {
-            board_name: '/'.join(models)
+            board_name: ' | '.join(models)
             for board_name, models
             in contents.items()
             }
@@ -179,21 +214,22 @@ def flatten_models(dicts: dict):
         }
 
 
-def get_as_json():
+def get_as_json() -> None:
     """Gets info as json."""
-    jsons = {file: {} for file in files}
+    jsons = {file: {} for file in FILES}
 
     # with open('example.html', 'r') as example:
     #     soup = BeautifulSoup(example, 'html.parser')
     
-    page = requests.get(url)
+    page = requests.get(URL)
     soup = BeautifulSoup(page.text, 'html.parser')
 
     two_tables = soup.find('td', 'sites-layout-tile')
     try:
         routers, usb_typec = two_tables.find_all('tbody')
-    except:
-        return False
+    except ValueError as e:
+        LOGGER.error(e)
+        return
 
     main_header = (
         soup.find('table', 'goog-ws-list-header')
@@ -222,8 +258,9 @@ def get_as_json():
             diff.append('===')
             diff.extend(
                 [
-                    d for d in
-                    difflib.ndiff(
+                    d
+                    for d
+                    in difflib.ndiff(
                         json.dumps(old, indent=4).splitlines(),
                         dump.splitlines()
                         )
@@ -238,7 +275,8 @@ def get_as_json():
                 g.write(old_diff)
             f.write(dump)
   
-    return True
+    return
+
 
 if __name__ == '__main__':
     get_as_json()
