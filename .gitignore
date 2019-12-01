@@ -1,4 +1,11 @@
-venv
-__pycache__
+# Sublime Text files
+*.sublime-*
 
-*.sublime*
+# Python files
+*venv*
+*__pycache__/*
+*.pyc
+
+# Project-specific files
+cros-b2d.log
+cros-b2d.log.[1-5]
