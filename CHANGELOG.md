@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.3.3] - 2019-12-01
+### Added
+- Lots of code polish
+    - logging
+    - better type-hints
+
+### Changed
+- Delimiter for multiple boards is now ` | `. This is because multiple entries have characters like `/` (the previous delimiter) or `,` or `&` (both also potential delimiters).
+    - This means that all the existing diffs were moved to `file.diff.old`. I'm sure that changing the delimiter would have caused the diffs to balloon in size.
+- Readme cleaned up
+
 ## [1.3.2] - 2019-09-01
 ### Added
 - Now using `collections.defaultdict` to handle boardname:model concatenation better
