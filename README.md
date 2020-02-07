@@ -1,67 +1,39 @@
-# Chrome OS board2device
+# board2device for *[ChromeOS][CROS]*
 
 ## Overview
 
-This script scrapes data from the [Developer Information page for Chrome OS][CROSDEV] and outputs to JSON.
+This project scrapes data from the [Developer Information page][CROSDEV] for *[ChromeOS][CROS]* and exports to JSONs.
 
 The keys are the board names; the values are all devices that fit under that umbrella.
 
-### Simplification of Board Names
+## Simplification of Board Names
 
 Some board names share some names in common, so the script makes an attempt to group the devices together, using the common name.
 
-1. `x86-` and `_he` on applicable boards are stripped.
+1. Any model listed with two boards will only use the first board listed.
 
-- `alex`
-    - `x86-alex`
-    - `x86-alex_he`
-- `mario`
-    - `x86-mario`
-- `zgb`
-    - `x86-zgb`
-    - `x86-zgb_he`
+- `alex`: `x86-alex & x86-alex_he`
+- `falco`: `falco & falco_li`
+- `zgb`: `x86-zgb & x86-zgb_he`
 
-2. Any model listed with two boards will only use the first board listed.
+2. `x86-` and `_he` on applicable boards are stripped.
 
-- `alex`
-    - `x86-alex & x86-alex_he`
-- `falco`
-    - `falco & falco_li`
-- `zgb`
-    - `x86-zgb & x86-zgb_he`
+- `alex`: `x86-alex` (after step 1)
+- `mario`: `x86-mario`
+- `zgb`: `x86-zgb` (after step 1)
 
-3. Any and all models that share a common board will be as one string, delimited by ` | `. (i.e. `board name: device 1 | device 2`, etc.)
+3. Any and all models that share a common board will be as one string, delimited by `<space>|<space>`. (i.e. `"board name": "device 1 | device 2"`, etc.)
 
 - `hana: Lenovo N23 Yoga Chromebook | Poin2 Chromebook 14 | Poin2 Chromebook 11C | Lenovo 300e Chromebook | Lenovo Chromebook C330 | Lenovo Chromebook S330`
 
-4. ([`boardnamedevices-2.json`](boardnamedevices-2.json) *only*) Board names with a sub-board name are ignored.
-    
-- `auron`
-    - `auron_paine`
-    - `auron_yuna`
-- `daisy`
-    - `daisy`
-    - `daisy_skate`
-    - `daisy_spring`
-- `nyan`
-    - `nyan_big`
-    - `nyan_blaze`
-    - `nyan_kitty`
-- `parrot`
-    - `parrot`
-    - `parrot_ivb`
-- `peach`
-    - `peach_pi`
-    - `peach_pit`
-- `veyron`
-    - `veyron_fievel`
-    - `veyron_jaq`
-    - `veyron_jerry`
-    - `veyron_mickey`
-    - `veyron_mighty`
-    - `veyron_minnie`
-    - `veyron_speedy`
-    - `veyron_tiger`
+4. ([`boardnamedevices-2.json`](boardnamedevices-2.json)) Board names with a sub-board name are ignored.
+
+- `auron`: `auron_paine`, `auron_yuna`
+- `daisy`: `daisy`, `daisy_skate`, `daisy_spring`
+- `nyan`: `nyan_big`, `nyan_blaze`, `nyan_kitty`
+- `parrot`: `parrot`, `parrot_ivb`
+- `peach`: `peach_pi`, `peach_pit`
+- `veyron`: `veyron_fievel`, `veyron_jaq`, `veyron_jerry`, `veyron_mickey`, `veyron_mighty`, `veyron_minnie`, `veyron_speedy`, `veyron_tiger`,
 
 ## Usage
 
@@ -72,9 +44,9 @@ After installing [requirements](#requirements), run [`scraper.py`](scraper.py).
 This code is designed around the following:
 
 - Python 3.6+
-    - `bs4` and its dependencies, used for scraping
-    - `requests` and its dependencies, used in conjunction with `bs4`
-    - `pendulum` and its dependencies, used for date and time
+    - `bs4`, used for scraping
+    - `requests`, used in conjunction with `bs4`
+    - `pendulum`, used for date and time
     - other [requirements](requirements.txt)
 
 ## Files
@@ -100,6 +72,10 @@ These files are generated/updated every day at midnight Pacific Time via `cron`.
 - [`boardnamedevices-1.diff`][diff-1]
 - [`boardnamedevices-2.diff`][diff-2]
 
+## Disclaimer
+
+This project is not affiliated with or endorsed by *[Google][GOOGLE]*, *[Chromium][CHROMIUM]*, or *[Google Chrome][GCHROME]*. See [`LICENSE`](LICENSE) for more detail.
+
 #### For the [r/ChromeOS](https://www.reddit.com/r/chromeos) Discord.
 
 [json-0]: https://dark-nova.me/chromeos/boardnamedevices.json
@@ -108,4 +84,8 @@ These files are generated/updated every day at midnight Pacific Time via `cron`.
 [diff-0]: https://dark-nova.me/chromeos/boardnamedevices.diff.txt
 [diff-1]: https://dark-nova.me/chromeos/boardnamedevices-1.diff.txt
 [diff-2]: https://dark-nova.me/chromeos/boardnamedevices-2.diff.txt
+[CHROMIUM]: https://www.chromium.org/
+[CROS]: https://www.google.com/chromebook/
 [CROSDEV]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
+[GOOGLE]: https://www.google.com/
+[GCHROME]: https://www.google.com/chrome/
