@@ -1,3 +1,19 @@
+2020-02-13
+===
++     "hoho": "USB Type-C to HDMI Adapter | USB Type-C to VGA Adapter",
+-     "hoho": "USB Type-C to HDMI Adapter",
+-     "hoho, but substitute a dp to vga chip": "USB Type-C to VGA Adapter",
+-     "hana": "Lenovo N23 Yoga Chromebook | Poin2 Chromebook 14 | Poin2 Chromebook 11C | Lenovo 300e Chromebook | Lenovo Chromebook C330 | Lenovo Chromebook S330 | Lenovo 300e Chromebook 2nd Gen (MTK) | Lenovo 100e Chromebook 2nd Gen (MTK)",
++     "hana": "Lenovo 100e Chromebook 2nd Gen (MTK) | Lenovo 300e Chromebook | Lenovo 300e Chromebook 2nd Gen (MTK) | Lenovo Chromebook C330 | Lenovo Chromebook S330 | Lenovo N23 Yoga Chromebook | Poin2 Chromebook 11C | Poin2 Chromebook 14",
+-     "coral": "Acer Chromebook 11 (C732, C732T, C732L & C732LT ) | Lenovo 100e Chromebook | Lenovo 500e Chromebook | AcerChromebook 11 (CB311-8H & CB311-8HT) | Acer Chromebook Spin 11 (CP311-1H & CP311-1HN) | CTL Chromebook J41 | CTL Chromebook NL7 | CTL Chromebook NL7T-360 | ASUS Chromebook C223 | ASUS Chromebook C423 | ASUS Chromebook C523 | PCmerge Chromebook AL116 | ASUS Chromebook C403",
++     "coral": "ASUS Chromebook C223 | ASUS Chromebook C403 | ASUS Chromebook C423 | ASUS Chromebook C523 | Acer Chromebook 11 (C732, C732T, C732L & C732LT ) | Acer Chromebook 11 (CB311-8H & CB311-8HT) | Acer Chromebook Spin 11 (CP311-1H & CP311-1HN) | CTL Chromebook J41 | CTL Chromebook NL7 | CTL Chromebook NL7T-360 | Lenovo 100e Chromebook | Lenovo 500e Chromebook | PCmerge Chromebook AL116",
+-     "fizz": "HP Chromebox G2 | Acer Chromebox CXI3 | CTL Chromebox CBx1 | ViewSonic NMP660 Chromebox | ASUS Chromebox 3",
++     "fizz": "ASUS Chromebox 3 | Acer Chromebox CXI3 | CTL Chromebox CBx1 | HP Chromebox G2 | ViewSonic NMP660 Chromebox",
+-     "grunt": "HP Chromebook 14 (db0000-db0999) | Acer Chromebook 315 | HP Chromebook 11A G6 EE | The Acer Chromebook 311 (C721) | Acer Chromebook Spin 311 (R721T)",
++     "grunt": "Acer Chromebook 315 | Acer Chromebook Spin 311 (R721T) | HP Chromebook 11A G6 EE | HP Chromebook 14 (db0000-db0999) | The Acer Chromebook 311 (C721)",
+-     "octopus": "Lenovo 300e Chromebook 2nd Gen (Intel) | Lenovo 100e Chromebook 2nd Gen (Intel) | Lenovo 500e Chromebook 2nd Gen | Acer Chromebook Spin 512(R851TN) | Acer Chromebook 512(C851/C851T) | ASUS Chromebook Flip C204 | ASUS-Chromebook-Flip-C214 | HP Chromebook x360 11 G2 EE | HP Chromebook 11 G7 EE | Lenovo Chromebook C340-11 | Lenovo Chromebook S340-14 | Acer Chromebook 315 (CB315-3H/3HT) | Acer Chromebook 314 (CB314-1H/1HT) | Acer Chromebook Spin 311 (CP311-2H) | Acer Chromebook 311 (CB311-9HT/9H) ) | Samsung Chromebook 4 | Samsung Chromebook+ | HP Chromebook x360 11 G3 EE | HP Chromebook 14 G6 | HP Chromebook 11 G8 EE",
++     "octopus": "ASUS Chromebook Flip C204 | ASUS Chromebook Flip C214 | Acer Chromebook 311 (CB311-9HT/9H) ) | Acer Chromebook 314 (CB314-1H/1HT) | Acer Chromebook 315 (CB315-3H/3HT) | Acer Chromebook 512(C851/C851T) | Acer Chromebook Spin 311 (CP311-2H) | Acer Chromebook Spin 512(R851TN) | HP Chromebook 11 G7 EE | HP Chromebook 11 G8 EE | HP Chromebook 14 G6 | HP Chromebook x360 11 G2 EE | HP Chromebook x360 11 G3 EE | Lenovo 100e Chromebook 2nd Gen (Intel) | Lenovo 300e Chromebook 2nd Gen (Intel) | Lenovo 500e Chromebook 2nd Gen | Lenovo Chromebook C340-11 | Lenovo Chromebook S340-14 | Samsung Chromebook 4 | Samsung Chromebook+",
+
 2020-02-01
 ===
 -     "octopus": "Lenovo 300e Chromebook 2nd Gen (Intel) | Lenovo 100e Chromebook 2nd Gen (Intel) | Lenovo 500e Chromebook 2nd Gen | Acer Chromebook Spin 512(R851TN) | Acer Chromebook 512(C851/C851T) | ASUS Chromebook Flip C204 | ASUS-Chromebook-Flip-C214 | HP Chromebook x360 11 G2 EE | HP Chromebook 11 G7 EE | Lenovo Chromebook C340-11 | Lenovo Chromebook S340-14 | Acer Chromebook 315 (CB315-3H/3HT) | Acer Chromebook 314 (CB314-1H/1HT) | Acer Chromebook Spin 311 (CP311-2H) | Acer Chromebook 311 (CB311-9HT/9H) ) | Samsung Chromebook 4 | Samsung Chromebook+",

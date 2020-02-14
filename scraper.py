@@ -111,8 +111,9 @@ def parse_header(header: ResultSet) -> Dict[str, int]:
     return idx
 
 
-def iterate_table(table: Tag, header: ResultSet = None) -> JSON:
-    """Iterates through a `table` to retrieve `Model` and `Board name(s)`.
+def iterate_table(table: Tag, header: ResultSet = None) -> JSONS:
+    """Iterates through a `table` to retrieve `Model` and
+    `Board name(s)`, creating three distinct JSONs.
 
     Args:
         table (Tag): the table to parse
@@ -120,13 +121,18 @@ def iterate_table(table: Tag, header: ResultSet = None) -> JSON:
             defaults to None
 
     Returns:
-        dict: of dicts with keys as `Board name(s)` and values as `Model`
+        JSONS: each JSON with `Board name(s)` as the keys and
+            `Model` as the values
 
     """
     jsons = {file: defaultdict(list) for file in FILES}
+    white_label = {file: defaultdict(int) for file in FILES}
+
     if not header:
         header = table.tr.find_all('td')
+
     head = parse_header(header)
+
     for row in table.find_all('tr')[1:]:
         tds = row.find_all('td')
         model = sanitize(tds[head[COL_MODEL]])
@@ -134,16 +140,29 @@ def iterate_table(table: Tag, header: ResultSet = None) -> JSON:
         board_name = simplify_board_name(sanitize(tds[head[COL_BNAME]]))
 
         for file, contents in jsons.items():
-            if not model and file == FILES[0]:
-                # For `boardnamedevices.json`, do not record blank names
-                continue
-            elif not model:
-                model = "White Label"
-
             if file == FILES[2]:
                 board_name = simplify_underscores(board_name)
 
-            contents[board_name].append(model)
+            if not model and file == FILES[0]:
+                # For `boardnamedevices.json`, do not record blank names
+                continue
+            elif model:
+                if model == 'ASUS-Chromebook-Flip-C214': # Why?!
+                    model = model.replace('-', ' ')
+                elif model == 'AcerChromebook 11 (CB311-8H & CB311-8HT)':
+                    model = 'Acer Chromebook 11 (CB311-8H & CB311-8HT)'
+            
+                contents[board_name].append(model)
+            else:
+                white_label[file][board_name] += 1
+
+    for file, contents in jsons.items():
+        for _, content in contents.items():
+            content.sort()
+
+    for file, contents in white_label.items():
+        for board_name, wl_count in contents.items():
+            jsons[file][board_name].append(f'White Label ({wl_count})')
 
     return jsons
 
@@ -194,11 +213,11 @@ def create_jsons() -> None:
     """Create all JSON files and diffs for easier consumption."""
     jsons = {file: {} for file in FILES}
 
-    with open('example.html', 'r') as example:
-        soup = BeautifulSoup(example, 'html.parser')
+    # with open('example.html', 'r') as example:
+    #     soup = BeautifulSoup(example, 'html.parser')
     
-    #page = requests.get(URL)
-    #soup = BeautifulSoup(page.text, 'html.parser')
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.text, 'html.parser')
 
     two_tables = soup.find('td', class_='sites-layout-tile')
     try:
