@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Rearranged diffs. Moved breaking diff changes from formatting into appropriate `.old`.
 - Semanting versioning is now `x.y.z` for all changes and retroactively.
+- `White Label (1)` in any JSON should now just be `White Label`
 
 ## [1.3.5] - 2020-02-13
 ### Added

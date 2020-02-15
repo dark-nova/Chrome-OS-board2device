@@ -166,7 +166,11 @@ def iterate_table(table: Tag, header: ResultSet = None) -> JSONS:
             content.sort()
             if board_name in white_label[file]:
                 content.remove(WL)
-                content.append(f'White Label ({white_label[file][board_name]})')
+                count = white_label[file][board_name]
+                if count == 1:
+                    content.append(f'White Label')
+                else:
+                    content.append(f'White Label ({count})')
 
     return jsons
 
