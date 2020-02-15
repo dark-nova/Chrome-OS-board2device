@@ -9,7 +9,7 @@ import requests
 from bs4 import BeautifulSoup
 from bs4.element import Tag, ResultSet
 
-from config import LOGGER
+from config import LOGGER, MODEL_CHANGES
 
 
 URL = (
@@ -25,6 +25,8 @@ FILES = [
 
 COL_MODEL = 'Model'
 COL_BNAME = 'Board name(s)'
+
+WL = 'WHITE_LABEL'
 
 TO_REMOVE = re.compile('(x86-|_he)')
 
@@ -139,6 +141,10 @@ def iterate_table(table: Tag, header: ResultSet = None) -> JSONS:
 
         board_name = simplify_board_name(sanitize(tds[head[COL_BNAME]]))
 
+        # Fix errata in model names by comparing with the change list.
+        if model in MODEL_CHANGES:
+            model = MODEL_CHANGES[model]
+
         for file, contents in jsons.items():
             if file == FILES[2]:
                 board_name = simplify_underscores(board_name)
@@ -147,22 +153,20 @@ def iterate_table(table: Tag, header: ResultSet = None) -> JSONS:
                 # For `boardnamedevices.json`, do not record blank names
                 continue
             elif model:
-                if model == 'ASUS-Chromebook-Flip-C214': # Why?!
-                    model = model.replace('-', ' ')
-                elif model == 'AcerChromebook 11 (CB311-8H & CB311-8HT)':
-                    model = 'Acer Chromebook 11 (CB311-8H & CB311-8HT)'
-            
                 contents[board_name].append(model)
             else:
+                # This is a dummy value to remove later. This is to
+                # preserve device order as seen on the source page.
+                if WL not in contents[board_name]:
+                    contents[board_name].append(WL)
                 white_label[file][board_name] += 1
 
     for file, contents in jsons.items():
-        for _, content in contents.items():
+        for board_name, content in contents.items():
             content.sort()
-
-    for file, contents in white_label.items():
-        for board_name, wl_count in contents.items():
-            jsons[file][board_name].append(f'White Label ({wl_count})')
+            if board_name in white_label[file]:
+                content.remove(WL)
+                content.append(f'White Label ({white_label[file][board_name]})')
 
     return jsons
 
@@ -274,8 +278,11 @@ def create_jsons() -> None:
                     ]
                 )
 
-            with open(diff_file, 'r') as g:
-                old_diff = '\n\n' + g.read()
+            if old:
+                with open(diff_file, 'r') as g:
+                    old_diff = '\n\n' + g.read()
+            else:
+                old_diff = ''
             with open(diff_file, 'w') as g:
                 g.write('\n'.join(diff))
             with open(diff_file, 'a') as g:

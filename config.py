@@ -1,3 +1,4 @@
+import json
 import logging
 import logging.handlers
 
@@ -28,3 +29,6 @@ CH.setFormatter(
 
 LOGGER.addHandler(FH)
 LOGGER.addHandler(CH)
+
+with open('model_changes.json', 'r') as f:
+    MODEL_CHANGES = json.load(f)

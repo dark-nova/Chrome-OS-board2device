@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.4.0] - 2020-02-15
+### Added
+- Added more model name corrections. See `MODEL_CHANGES` in [`config.py`](config.py) and the file itself, [`model_changes.json`](model_changes.json). I admit these changes are a little heavy-handed, but many of these models broke consistency entirely.
+
+### Changed
+- Rearranged diffs. Moved breaking diff changes from formatting into appropriate `.old`.
+- Semanting versioning is now `x.y.z` for all changes and retroactively.
+
 ## [1.3.5] - 2020-02-13
 ### Added
 - Added missing/incomplete documentation
@@ -44,7 +52,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improved [readme](README.md)
 - Line spacing on diffs
 
-## [1.3] - 2019-06-26
+## [1.3.0] - 2019-06-26
 ### Added
 - Diff files added to show changes between versions, timestamped
     - [`boardnamedevices.diff`](boardnamedevices-1.diff)
@@ -59,15 +67,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - `jsonlines.sh` is no longer necessary; instead, `json.dumps` uses `indent=4` for the equivalent pretty-printing.
 
-## [1.2] - 2019-06-11
+## [1.2.0] - 2019-06-11
 ### Changed
 - Outputs to all three variants instead of selectively via commenting
 
-## [1.1] - 2019-05-21
+## [1.1.0] - 2019-05-21
 ### Added
 - [`boardnamedevices-1.json`](boardnamedevices-1.json) adds back white label devices that are otherwise pruned from the base file
 - [`boardnamedevices-2.json`](boardnamedevices-2.json) splits board names like `x_y` to use `x` instead
 
-## [1.0] - 2019-05-11
+## [1.0.0] - 2019-05-11
 ### Added
 - Initial version
