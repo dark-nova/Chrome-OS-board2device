@@ -74,7 +74,7 @@
     "kevin": "Samsung Chromebook Plus",
     "veyron_tiger": "AOpen Chromebase Mini",
     "veyron_fievel": "AOpen Chromebox Mini",
-    "hana": "Lenovo 100e Chromebook 2nd Gen (MTK) | Lenovo 300e Chromebook | Lenovo 300e Chromebook 2nd Gen (MTK) | Lenovo Chromebook C330 | Lenovo Chromebook S330 | Lenovo N23 Yoga Chromebook | Poin2 Chromebook 11C | Poin2 Chromebook 14",
+    "hana": "ASUS Chromebook C202XA | Lenovo 100e Chromebook 2nd Gen (MTK) | Lenovo 300e Chromebook | Lenovo 300e Chromebook 2nd Gen (MTK) | Lenovo Chromebook C330 | Lenovo Chromebook S330 | Lenovo N23 Yoga Chromebook | Poin2 Chromebook 11C | Poin2 Chromebook 14",
     "pyro": "Lenovo Thinkpad (11e & Yoga 11e) Chromebook",
     "snappy": "HP Chromebook x360 11 G1 EE",
     "caroline": "Samsung Chromebook Pro",
@@ -96,5 +96,8 @@
     "octopus": "ASUS Chromebook Flip C204 | ASUS Chromebook Flip C214 | Acer Chromebook 311 (CB311-9HT, CB311-9H) | Acer Chromebook 314 (CB314-1H, CB314-1HT) | Acer Chromebook 315 (CB315-3H, CB315-3HT) | Acer Chromebook 512 (C851, C851T) | Acer Chromebook Spin 311 CP311-2H | Acer Chromebook Spin 512 R851TN | HP Chromebook 11 G7 EE | HP Chromebook 11 G8 EE | HP Chromebook 14 G6 | HP Chromebook x360 11 G2 EE | HP Chromebook x360 11 G3 EE | Lenovo 100e Chromebook 2nd Gen (Intel) | Lenovo 300e Chromebook 2nd Gen (Intel) | Lenovo 500e Chromebook 2nd Gen | Lenovo Chromebook C340-11 | Lenovo Chromebook S340-14 | Samsung Chromebook 4 | Samsung Chromebook+",
     "liara": "Lenovo 14e Chromebook",
     "rammus": "ASUS Chromebook Flip C434",
-    "scarlet": "ASUS Chromebook Tablet CT100 | CTL Chromebook Tab Tx1"
+    "scarlet": "ASUS Chromebook Tablet CT100 | CTL Chromebook Tab Tx1",
+    "leona": "ASUS Chromebook C425",
+    "shyvana": "ASUS Chromebook Flip C433TA",
+    "hatch": "ASUS Chromebook Flip C436FA"
 }
